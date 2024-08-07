@@ -1,9 +1,122 @@
-kind: ConfigMap
-apiVersion: v1
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: nginx-config
-  namespace: nginx-ingress
-data:
-  proxy-protocol: "True"
-  real-ip-header: "proxy_protocol"
-  set-real-ip-from: "0.0.0.0/0"
+  name: sock-shop-ingress
+  namespace: sock-shop
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: a06757624e9014dac8c202e87dcf4290-1326618572.eu-west-2.elb.amazonaws.com
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: front-end
+                port:
+                  number: 80
+            path: /
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: orders
+                port:
+                  number: 80
+            path: /orders
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: orders-db
+                port:
+                  number: 27017
+            path: /orders-db
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: payment
+                port:
+                  number: 80
+            path: /payment
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: queue-master
+                port:
+                  number: 80
+            path: /queue-master
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: 5672
+            path: /rabbitmq
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: session-db
+                port: 
+                  number: 6379
+            path: /session-db
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: shipping
+                port: 
+                  number: 80
+            path: /shipping
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: user
+                port: 
+                  number: 80
+            path: /user
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: user-db
+                port: 
+                  number: 27017
+            path: /user-db
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: carts
+                port: 
+                  number: 80
+            path: /carts
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: carts-db
+                port: 
+                  number: 27017
+            path: /carts-db
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: catalogue
+                port:
+                  number: 80
+            path: /catalogue
+
+          - pathType: Prefix
+            backend:
+              service:
+                name: catalogue-db
+                port:
+                  number: 3306
+            path: /catalogue-db
